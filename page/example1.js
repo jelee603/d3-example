@@ -1,11 +1,11 @@
-var Table = function module() {
+var Header = function module() {
   var opts = {
     width: 200,
     height: 200,
     margins: { top: 20, right: 20, bottom: 20, left: 20 },
   };
 
-  function exports(selection) {
+  function test(selection) {
     selection.each(function (dataset) {
       //________________________________________________
       // Data
@@ -41,9 +41,9 @@ var Table = function module() {
           'translate(' + opts.margins.left + ',' + opts.margins.top + ')'
         );
 
-      var tableBodySvg = visSvg.append('g').attr('class', 'table-body');
+      //   var tableBodySvg = visSvg.append('g').attr('class', 'table-body');
       var tableHeaderSvg = visSvg.append('g').attr('class', 'table-header');
-      var rowHeaderSvg = tableBodySvg.append('g').attr('class', 'row-header');
+      //   var rowHeaderSvg = tableBodySvg.append('g').attr('class', 'row-header');
       var colHeaderSvg = tableHeaderSvg.append('g').attr('class', 'col-header');
 
       //________________________________________________
@@ -53,42 +53,6 @@ var Table = function module() {
       var colHeaderLevelNum = 1;
       var cellH = chartH / (value.length + rowHeaderLevelNum);
       var cellW = chartW / (value[0].length + colHeaderLevelNum);
-
-      // Row header
-      var rowHeaderCell = rowHeaderSvg
-        .selectAll('rect.row-header-cell')
-        .data(rowLabel);
-      rowHeaderCell
-        .enter()
-        .append('rect')
-        .attr({
-          class: 'row-header-cell',
-          width: cellW,
-          height: cellH,
-          x: 0,
-          y: function (d, i) {
-            return i * cellH + cellH * colHeaderLevelNum;
-          },
-        })
-        .style({ fill: '#eee', stroke: 'silver' });
-
-      // Row header text
-      rowHeaderCell
-        .enter()
-        .append('text')
-        .attr({
-          class: 'row-header-content',
-          x: 0,
-          y: function (d, i) {
-            return i * cellH + cellH * colHeaderLevelNum;
-          },
-          dx: cellW / 2,
-          dy: cellH / 2,
-        })
-        .style({ fill: 'black', 'text-anchor': 'middle' })
-        .text(function (d, i) {
-          return d;
-        });
 
       // Col header
       var colHeaderCell = colHeaderSvg
@@ -125,6 +89,106 @@ var Table = function module() {
         .text(function (d, i) {
           return d;
         });
+    });
+  }
+
+  test.opts = opts;
+  createAccessors(test, opts);
+  return test;
+};
+
+var Table = function module() {
+  var opts = {
+    width: 200,
+    height: 200,
+    margins: { top: 20, right: 20, bottom: 20, left: 20 },
+  };
+
+  function exports(selection) {
+    selection.each(function (dataset) {
+      //________________________________________________
+      // Data
+      //________________________________________________
+      var rowLabel = dataset.rowLabel;
+      var value = dataset.value;
+
+      //________________________________________________
+      // DOM preparation
+      //________________________________________________
+      // Size
+      var chartW = Math.max(
+        opts.width - opts.margins.left - opts.margins.right,
+        0.1
+      );
+      var chartH = Math.max(
+        opts.height - opts.margins.top - opts.margins.bottom,
+        0.1
+      );
+
+      // SVG
+      var parentDiv = d3.select(this).html(''); //body
+      var svg = parentDiv
+        .append('svg')
+        .attr('width', opts.width)
+        .attr('height', opts.height);
+      var visSvg = svg
+        .append('g')
+        .attr('class', 'vis-group')
+        .attr(
+          'transform',
+          //   'translate(' + opts.margins.left + ',' + opts.margins.top + ')'
+          'translate(' + opts.margins.left + ', 3)'
+        );
+
+      var tableBodySvg = visSvg.append('g').attr('class', 'table-body');
+      //   var tableHeaderSvg = visSvg.append('g').attr('class', 'table-header');
+      var rowHeaderSvg = tableBodySvg.append('g').attr('class', 'row-header');
+      //   var colHeaderSvg = tableHeaderSvg.append('g').attr('class', 'col-header');
+
+      //________________________________________________
+      // Table
+      //________________________________________________
+      var rowHeaderLevelNum = 1;
+      var colHeaderLevelNum = 1;
+      var cellH = chartH / (value.length + rowHeaderLevelNum);
+      var cellW = chartW / (value[0].length + colHeaderLevelNum);
+
+      // Row header
+      var rowHeaderCell = rowHeaderSvg
+        .selectAll('rect.row-header-cell')
+        .data(rowLabel);
+      rowHeaderCell
+        .enter()
+        .append('rect')
+        .attr({
+          class: 'row-header-cell',
+          width: cellW,
+          height: cellH,
+          x: 0,
+          y: function (d, i) {
+            // return i * cellH + cellH * colHeaderLevelNum;
+            return i * cellH * colHeaderLevelNum;
+          },
+        })
+        .style({ fill: '#eee', stroke: 'silver' });
+
+      // Row header text
+      rowHeaderCell
+        .enter()
+        .append('text')
+        .attr({
+          class: 'row-header-content',
+          x: 0,
+          y: function (d, i) {
+            return i * cellH * colHeaderLevelNum;
+          },
+          dx: cellW / 2,
+          dy: cellH / 2,
+        })
+        .style({ fill: 'black', 'text-anchor': 'middle' })
+        .text(function (d, i) {
+          return d;
+        });
 
       // Body
       var row = tableBodySvg.selectAll('g.row').data(value);
@@ -146,7 +210,7 @@ var Table = function module() {
                 return i * cellW + cellW * rowHeaderLevelNum;
               },
               y: function (d, i) {
-                return pI * cellH + cellH;
+                return pI * cellH;
               },
             })
             .style({ fill: 'white', stroke: 'silver' });
@@ -163,7 +227,7 @@ var Table = function module() {
                 return i * cellW + cellW * rowHeaderLevelNum + d;
               },
               y: function (d, i) {
-                return pI * cellH + cellH + 5;
+                return pI * cellH + 5;
               },
             })
             .style({ fill: 'pink' });
@@ -179,7 +243,7 @@ var Table = function module() {
                 return i * cellW + cellW * rowHeaderLevelNum;
               },
               y: function (d, i) {
-                return pI * cellH + cellH;
+                return pI * cellH;
               },
               dx: cellW / 2,
               dy: cellH / 2,
@@ -228,5 +292,16 @@ var width = 400;
 var height = 300;
 
 var table = Table().width(width).height(height);
+var header = Header().width(width).height(height);
 
+d3.select('#tableHeader').datum(dataset).call(header);
 d3.select('#tableContent').datum(dataset).call(table);
+
+var onMax = function () {
+  console.log('max');
+};
+
+// rows.forEach(row => {
+//     row.onmouseover = () => row.style.opacity = 0.5;
+//     row.onmouseleave = () => row.style.opacity = 1;
+// });
