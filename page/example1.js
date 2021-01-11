@@ -104,6 +104,96 @@ var Table = function module() {
     margins: { top: 20, right: 20, bottom: 20, left: 20 },
   };
 
+  function createBody(tableBodySvg, value, cellW, cellH, rowHeaderLevelNum) {
+    var row = tableBodySvg.selectAll('g.row').data(value);
+    row
+      .enter()
+      .append('g')
+      .attr('class', 'cell row')
+      .each(function (pD, pI) {
+        // Cells
+        var cell = d3.select(this).selectAll('rect.cell').data(pD);
+        cell
+          .enter()
+          .append('rect')
+          .attr({
+            class: 'cell',
+            width: cellW,
+            height: cellH,
+            x: function (d, i) {
+              return i * cellW + cellW * rowHeaderLevelNum;
+            },
+            y: function (d, i) {
+              return pI * cellH;
+            },
+          })
+          .style({ fill: 'white', stroke: 'silver' });
+
+        // Bar
+        cell
+          .enter()
+          .append('rect')
+          .attr({
+            class: 'cell-content',
+            width: 5,
+            height: 35,
+            x: function (d, i) {
+              return i * cellW + cellW * rowHeaderLevelNum + d;
+            },
+            y: function (d, i) {
+              return pI * cellH + 5;
+            },
+          })
+          .style({ fill: 'pink' });
+        // Text
+        cell
+          .enter()
+          .append('text')
+          .attr({
+            class: 'cell-content',
+            width: cellW,
+            height: cellH,
+            x: function (d, i) {
+              return i * cellW + cellW * rowHeaderLevelNum;
+            },
+            y: function (d, i) {
+              return pI * cellH;
+            },
+            dx: cellW / 2,
+            dy: cellH / 2,
+          })
+          .style({ fill: 'black', 'text-anchor': 'middle' })
+          .text(function (d, i) {
+            return d;
+          });
+      });
+  }
+
+  function createMouseLine(tableBodySvg, width, height) {
+    tableBodySvg
+      .append('svg:rect')
+      .attr('width', width) // can't catch mouse events on a g element
+      .attr('height', height)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .on('mouseout', function () {
+        // on mouse out hide line, circles and text
+        d3.select('.mouse-line').style('opacity', '0');
+        d3.selectAll('.mouse-per-line circle').style('opacity', '0');
+        d3.selectAll('.mouse-per-line text').style('opacity', '0');
+      })
+      .on('mouseover', function () {
+        // on mouse in show line, circles and text
+        d3.select('.mouse-line').style('opacity', '1');
+        d3.selectAll('.mouse-per-line circle').style('opacity', '1');
+        d3.selectAll('.mouse-per-line text').style('opacity', '1');
+      })
+      .on('mousemove', function () {
+        var mouse = d3.mouse(this);
+        console.log('hihi', mouse[0]);
+      });
+  }
+
   function exports(selection) {
     selection.each(function (dataset) {
       //________________________________________________
@@ -191,68 +281,8 @@ var Table = function module() {
         });
 
       // Body
-      var row = tableBodySvg.selectAll('g.row').data(value);
-      row
-        .enter()
-        .append('g')
-        .attr('class', 'cell row')
-        .each(function (pD, pI) {
-          // Cells
-          var cell = d3.select(this).selectAll('rect.cell').data(pD);
-          cell
-            .enter()
-            .append('rect')
-            .attr({
-              class: 'cell',
-              width: cellW,
-              height: cellH,
-              x: function (d, i) {
-                return i * cellW + cellW * rowHeaderLevelNum;
-              },
-              y: function (d, i) {
-                return pI * cellH;
-              },
-            })
-            .style({ fill: 'white', stroke: 'silver' });
-
-          // Bar
-          cell
-            .enter()
-            .append('rect')
-            .attr({
-              class: 'cell-content',
-              width: 5,
-              height: 35,
-              x: function (d, i) {
-                return i * cellW + cellW * rowHeaderLevelNum + d;
-              },
-              y: function (d, i) {
-                return pI * cellH + 5;
-              },
-            })
-            .style({ fill: 'pink' });
-          // Text
-          cell
-            .enter()
-            .append('text')
-            .attr({
-              class: 'cell-content',
-              width: cellW,
-              height: cellH,
-              x: function (d, i) {
-                return i * cellW + cellW * rowHeaderLevelNum;
-              },
-              y: function (d, i) {
-                return pI * cellH;
-              },
-              dx: cellW / 2,
-              dy: cellH / 2,
-            })
-            .style({ fill: 'black', 'text-anchor': 'middle' })
-            .text(function (d, i) {
-              return d;
-            });
-        });
+      createBody(tableBodySvg, value, cellW, cellH, rowHeaderLevelNum);
+      createMouseLine(tableBodySvg, opts.width, opts.height);
     });
   }
 
