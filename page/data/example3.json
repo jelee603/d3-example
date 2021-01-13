@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "Date": "01:00",
+      "Name": "Test",
+      "Complete": 0,
+      "Air_Temp": 0.5
+    },
+    {
+      "Date": "02:40",
+      "Name": "Test2",
+      "Complete": 1,
+      "Air_Temp": 3.5
+    }
+  ]
+}

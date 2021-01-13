@@ -1,6 +1,10 @@
 ### Step by Step
 
-https://observablehq.com/@shwldus3/d3-tutorial-2-introduction-to-d3-with-observable
+1. Intro
+   https://observablehq.com/@shwldus3/d3-tutorial-2-introduction-to-d3-with-observable
+
+2. Api
+   https://github.com/d3/d3/blob/master/API.md
 
 ### Sample
 
