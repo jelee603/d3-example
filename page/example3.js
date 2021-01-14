@@ -36,6 +36,8 @@ function draw(data) {
     });
 
   /** 해더 부분 */
+  var x = d3.scaleTime().domain([0, width]);
+  var xAxis = d3.axisBottom(x);
   const hours = Array.from(Array(24), (_, idx) => `${idx + 1}:00`);
   // .header => 스타일 클래스명으로 찾기
   var headerSvg = d3.select('svg.header').selectAll('box').data(hours).enter();
@@ -167,6 +169,25 @@ function draw(data) {
     .attr('x', 18)
     .attr('y', -2);
 
+  // zoom
+  var zoom = d3
+    .zoom()
+    .scaleExtent([1, Infinity])
+    .translateExtent([
+      [0, 0],
+      [width, height],
+    ])
+    .extent([
+      [0, 0],
+      [width, height],
+    ])
+    .on('zoom', zoomed);
+
+  chartSvg
+    .append('g')
+    .attr('class', 'axis axis--x')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(xAxis);
   //   chartSvg
   //     .append('line')
   //     .attr('x1', 0)
@@ -174,6 +195,13 @@ function draw(data) {
   //     .attr('x2', 0)
   //     .attr('y2', 120)
   //     .attr('stroke', 'red');
+}
+
+function zoomed() {
+  var t = d3.event.transform;
+  x.domain(t.rescaleX(x2).domain());
+  Line_chart.select('.line').attr('d', line);
+  focus.select('.axis--x').call(xAxis);
 }
 
 function cellX(date) {
