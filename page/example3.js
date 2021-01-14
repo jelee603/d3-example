@@ -56,6 +56,7 @@ function draw(data) {
     .selectAll('box')
     .data(data.data)
     .enter();
+
   var tableSvg = d3
     .select('svg.table')
     .selectAll('box')
@@ -91,7 +92,7 @@ function draw(data) {
 
   // 테이블 막대
   hours.forEach((v) => {
-    tableSvg.append('rect').attr({
+    chartSvg.append('rect').attr({
       class: 'cell',
       height: 40,
       width: 60,
@@ -121,6 +122,7 @@ function draw(data) {
     .text(function (d, i) {
       return d;
     });
+
   // 막대 바
   chartSvg
     .append('rect')
