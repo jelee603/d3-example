@@ -6,6 +6,9 @@
 2. Api
    https://github.com/d3/d3/blob/master/API.md
 
+3. Json
+   https://codeda.tistory.com/211
+
 ### Sample
 
 - http://timeline.knightlab.com/

@@ -7,27 +7,15 @@ var margin = 50,
 function draw(data) {
   d3.select('#header')
     .append('svg')
-    .attr({
-      class: 'header',
-      width: width - margin,
-      height: headerH,
-    });
-
-  d3.select('#table')
-    .append('svg')
-    .attr({
-      class: 'table',
-      width: width - margin,
-      height: height - margin,
-    });
+    .attr('class', 'header')
+    .attr('width', width - margin)
+    .attr('height', headerH);
 
   d3.select('#chart')
     .append('svg')
-    .attr({
-      class: 'chart',
-      width: width - margin,
-      height: height - margin,
-    })
+    .attr('class', 'chart')
+    .attr('width', width - margin)
+    .attr('height', height - margin)
     .on('mouseleave', function () {
       //   d3.select('line').remove();
     })
@@ -57,67 +45,65 @@ function draw(data) {
     .data(data.data)
     .enter();
 
-  var tableSvg = d3
-    .select('svg.table')
-    .selectAll('box')
-    .data(data.data)
-    .enter();
+  //   var tableSvg = d3
+  //     .select('svg.table')
+  //     .selectAll('box')
+  //     .data(data.data)
+  //     .enter();
 
   /** 테이블 부분 */
   // 테이블 헤더
-  headerSvg.append('rect').attr({
-    class: 'cell',
-    height: 40,
-    width: 120,
-    x: function (d, i) {
+  headerSvg
+    .append('rect')
+    .attr('class', 'cell')
+    .attr('height', 40)
+    .attr('width', 120)
+    .attr('x', function (d, i) {
       return 60 * (i + 1);
-    },
-    y: function (d, i) {
+    })
+    .attr('y', function (d, i) {
       return 0;
-    },
-  });
+    });
 
   // 테이블 라벨
-  chartSvg.append('rect').attr({
-    class: 'cell',
-    height: 40,
-    width: 60,
-    x: function (d, i) {
+  chartSvg
+    .append('rect')
+    .attr('class', 'cell')
+    .attr('height', 40)
+    .attr('width', 60)
+    .attr('x', function (d, i) {
       return 0;
-    },
-    y: function (d, i) {
+    })
+    .attr('y', function (d, i) {
       return 50 * i;
-    },
-  });
+    });
 
   // 테이블 막대
   hours.forEach((v) => {
-    chartSvg.append('rect').attr({
-      class: 'cell',
-      height: 40,
-      width: 60,
-      x: function (d, i) {
+    chartSvg
+      .append('rect')
+      .attr('class', 'cell')
+      .attr('height', 40)
+      .attr('width', 60)
+      .attr('x', function (d, i) {
         return cellX(v);
         // return cellX(d.Date);
-      },
-      y: function (d, i) {
+      })
+      .attr('y', function (d, i) {
         return 50 * i;
-      },
-    });
+      });
   });
   /** 차트 부분 */
 
   // 헤더
   headerSvg
     .append('text')
-    .attr({
-      height: 10,
-      x: function (d, i) {
-        return 60 * (i + 1);
-      },
-      y: function (d, i) {
-        return 20;
-      },
+    .attr('height', 10)
+    .attr('x', function (d, i) {
+      return 60 * (i + 1);
+    })
+    .attr('y', function (d, i) {
+      return 20;
     })
     .text(function (d, i) {
       return d;
@@ -126,15 +112,13 @@ function draw(data) {
   // 막대 바
   chartSvg
     .append('rect')
-    .attr({
-      height: 40,
-      width: barW,
-      x: function (d, i) {
-        return barX(d.Date);
-      },
-      y: function (d, i) {
-        return 50 * i;
-      },
+    .attr('height', 40)
+    .attr('width', barW)
+    .attr('x', function (d, i) {
+      return barX(d.Date);
+    })
+    .attr('y', function (d, i) {
+      return 50 * i;
     })
     .on('mouseover', function () {
       focus.style('display', null);
@@ -144,20 +128,18 @@ function draw(data) {
     })
     .on('mousemove', function (e) {
       focus.attr('transform', 'translate(40,40)');
-      focus.select('.tooltip-date').text(e.Name);
+      focus.select('.tooltip-date').text(this.__data__.Name);
     });
 
   // 라벨명
   chartSvg
     .append('text')
-    .attr({
-      x: 0,
-      y: function (d, i) {
-        return 50 * i;
-      },
-      dx: 15,
-      dy: 15,
+    .attr('x', 0)
+    .attr('y', function (d, i) {
+      return 50 * i;
     })
+    .attr('dx', 15)
+    .attr('dy', 15)
     .text(function (d, i) {
       return d.Name;
     });
@@ -166,19 +148,24 @@ function draw(data) {
   var focus = chartSvg
     .append('g')
     .attr('class', 'focus')
-    .style({ display: 'none' });
+    .style('display', 'none');
 
   //   focus.append('circle').attr('r', 5);
-  focus.append('rect').attr({
-    class: 'tooltip',
-    width: 100,
-    height: 50,
-    x: 10,
-    y: -22,
-    rx: 4,
-    ry: 4,
-  });
-  focus.append('text').attr({ class: 'tooltip-date', x: 18, y: -2 });
+  focus
+    .append('rect')
+    .attr('class', 'tooltip')
+    .attr('width', 100)
+    .attr('height', 50)
+    .attr('x', 10)
+    .attr('y', -22)
+    .attr('rx', 4)
+    .attr('ry', 4);
+
+  focus
+    .append('text')
+    .attr('class', 'tooltip-date')
+    .attr('x', 18)
+    .attr('y', -2);
 
   //   chartSvg
   //     .append('line')
@@ -201,4 +188,4 @@ function barX(date) {
   return 60 * parseInt(hh) + barW * (parseInt(mm) / 10);
 }
 
-d3.json('data/example3.json', draw);
+d3.json('data/example3.json').then(draw);
