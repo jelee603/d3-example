@@ -54,4 +54,4 @@ function draw(data) {
     .attr('r', 3);
 }
 
-d3.json('data/example2.json', draw);
+d3.json('../data/example2.json', draw);

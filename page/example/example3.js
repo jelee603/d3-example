@@ -8,13 +8,13 @@ function draw(data) {
   d3.select('#header')
     .append('svg')
     .attr('class', 'header')
-    .attr('width', width - margin)
+    .attr('width', '100%')
     .attr('height', headerH);
 
   d3.select('#chart')
     .append('svg')
     .attr('class', 'chart')
-    .attr('width', width - margin)
+    .attr('width', '100%')
     .attr('height', height - margin)
     .on('mouseleave', function () {
       //   d3.select('line').remove();
@@ -216,4 +216,4 @@ function barX(date) {
   return 60 * parseInt(hh) + barW * (parseInt(mm) / 10);
 }
 
-d3.json('data/example3.json').then(draw);
+d3.json('../data/example3.json').then(draw);
