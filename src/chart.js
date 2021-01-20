@@ -12,11 +12,10 @@ export default class Chart {
     this.data = options.data;
     this.xScale = options.xScale;
     this.scrollWrapperEl = options.scrollWrapperEl;
-    this.y_axis_width = 0;
-    this.cursor_width = 0;
 
     // static
     this.HEADER_H = 50;
+    this.LABEL_W = 100;
 
     // Element
     this.svgElement = this.createSvgElement();
@@ -122,11 +121,10 @@ export default class Chart {
   }
 
   mouseMoveHandler(event) {
-    console.log(event);
     this.hoverLineElement.attr('d', () =>
       this.getLine([
-        [event.x, 0],
-        [event.x, this.barHeight * this.rowCount],
+        [event.x - this.LABEL_W, 0],
+        [event.x - this.LABEL_W, this.barHeight * this.rowCount],
       ])
     );
 
@@ -159,8 +157,8 @@ export default class Chart {
       .attr('class', 'hoverline')
       .attr('d', () =>
         this.getLine([
-          [event.x, 0],
-          [event.x, this.barHeight * this.rowCount],
+          [event.x - this.LABEL_W, 0],
+          [event.x - this.LABEL_W, this.barHeight * this.rowCount],
         ])
       )
       .attr('stroke', 'black');
