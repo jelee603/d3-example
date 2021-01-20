@@ -1,8 +1,50 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>타이틀</title>
-</head>
-<body>
-</body>
+    <style>
+      #app {
+        width: 1000px;
+        height: 500px;
+        overflow: hidden;
+        /* margin: 0 auto; */
+      }
+
+      #x_axis {
+        height: 50px;
+        background: white;
+      }
+
+      #temp {
+        flex-basis: 100px;
+        background: pink;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: row;
+        height: 50px;
+      }
+
+      .graph {
+        display: flex;
+        flex-direction: row;
+        height: 500px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="header">
+        <div id="temp"></div>
+        <div id="x_axis"></div>
+      </div>
+      <div class="graph">
+        <div id="y_axis"></div>
+        <div id="table"></div>
+      </div>
+    </div>
+  </body>
 </html>

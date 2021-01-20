@@ -1,11 +1,31 @@
-import * as d3 from 'd3';
+import Core from './core.js';
 
-const svg = d3.select('body')
-    .append('svg')
-    .attr('width', 500).attr('height', 200);
-svg.append('rect')
-    .attr('x', 10)
-    .attr('y', 10)
-    .attr('width', 80)
-    .attr('height', 80)
-    .attr('fill', 'blue');
+const rowCount = 20;
+const barHeight = 50;
+const VIEW_BOX = {
+  width: 1000,
+  height: rowCount * barHeight,
+  margin: 50,
+};
+
+function mockData(length = rowCount) {
+  return Array(length)
+    .fill(0)
+    .map(() => ({
+      x: Date.now() + Math.floor(Math.random() * 1e8),
+      y: Math.floor(Math.random() * 10),
+      z: Math.floor(Math.random() * rowCount),
+    }));
+}
+
+const data = mockData();
+
+console.log(data);
+
+new Core({
+  ...VIEW_BOX,
+  data: data,
+  rowCount,
+  barHeight,
+  elQuery: '#table',
+});
